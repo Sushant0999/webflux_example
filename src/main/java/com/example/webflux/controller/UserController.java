@@ -1,6 +1,7 @@
 package com.example.webflux.controller;
 
 import com.example.webflux.service.UserService;
+import com.example.webflux.service.UserWebClient;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class UserController {
     public static Logger LOGGER = Loggers.getLogger(Loggers.class);
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserWebClient client;
 
     @PostMapping("/add")
     public Mono<User> addUser(@RequestBody User user) {
@@ -150,6 +154,11 @@ public class UserController {
                 });
         return Flux.interval(ofSeconds(5)) // Emit a value every second
                 .map(tick -> arr); // Map each tick to the current system time
+    }
+
+    @GetMapping("/getAllUser")
+    public void getUsers(){
+         client.getUsers();
     }
 
 }
